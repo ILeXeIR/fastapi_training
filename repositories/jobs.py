@@ -1,3 +1,5 @@
+import datetime
+
 from typing import List, Optional
 from models.jobs import Job, JobIn
 from db.jobs import jobs
@@ -52,7 +54,7 @@ class JobRepository(BaseRepository):
 
 	async def get_by_id(self, id: int) -> Optional[Job]:
 		query = jobs.select().where(jobs.c.id==id)
-		job = await self.database.fetch_one(query=query)
+		job = await self.database.fetch_one(query)
 		if job is None:
 			return None
 		return Job.parse_obj(job)

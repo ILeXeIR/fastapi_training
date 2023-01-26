@@ -3,7 +3,7 @@ from typing import Optional
 from pydantic import BaseModel, EmailStr, validator, constr
 
 class User(BaseModel):
-	id: Optional[str] = None
+	id: Optional[int] = None
 	name: str
 	email: EmailStr
 	hashed_password: str
