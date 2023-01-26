@@ -1,21 +1,12 @@
 import uvicorn
 
-from typing import Union
 from fastapi import FastAPI
 from db.base import database
-from pydantic import BaseModel
+from endpoints import users
 
-app = FastAPI()
+app = FastAPI(title="Employment exchange")
+app.include_router(users.router, prefix="/users", tags=["users"])
 
-
-class Item(BaseModel):
-    name: str
-    price: float
-    is_offer: Union[bool, None] = None
-
-@app.get("/")
-async def root():
-	return {"Hello": "World"}
 
 @app.on_event("startup")
 async def startup():
@@ -24,15 +15,6 @@ async def startup():
 @app.on_event("shutdown")
 async def shutdown():
 	await database.disconnect()
-
-
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Union[str, None] = None):
-	return {"item_id": item_id, "q": q}
-
-@app.put("/items/{item_id}")
-def update_item(item_id: int, item: Item):
-    return {"item_name": item.name, "item_id": item_id}
 
 
 if __name__ == "__main__":
