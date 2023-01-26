@@ -10,8 +10,8 @@ router = APIRouter()
 async def read_users(
 	users: UserRepository = Depends(get_user_repository),
 	limit: int = 100, 
-	skip: int = 100):
-	return await users.get_all(limit=limit, skip=0)
+	skip: int = 0):
+	return await users.get_all(limit=limit, skip=skip)
 
 @router.post("/", response_model=User)
 async def create_user(
@@ -27,6 +27,6 @@ async def update_user(
 	current_user: User = Depends(get_current_user)):
 	old_user = await users.get_by_id(id=id)
 	if old_user is None or old_user.email != current_user.email:
-		return HTTPException(status_code=status.HTTP_404_NOT_FOUND, 
+		raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, 
 							detail="User is not found")
 	return await users.update(id=id, u=user)

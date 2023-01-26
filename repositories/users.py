@@ -21,6 +21,7 @@ class UserRepository(BaseRepository):
 
 	async def create(self, u: UserIn) -> User:
 		user = User(
+			id=0,
 			name=u.name,
 			email=u.email,
 			hashed_password=hash_password(u.password),
