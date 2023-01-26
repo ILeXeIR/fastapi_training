@@ -1,4 +1,4 @@
-from fastapi import Depends, HTTPException
+from fastapi import Depends, HTTPException, status
 from repositories.users import UserRepository
 from db.base import database
 from core.security import JWTBearer, decode_access_token
@@ -13,7 +13,7 @@ async def get_current_user(
 ) -> User:
 	cred_exception = HTTPException(status_code=status.HTTP_403_FORBIDDEN, 
 									detail="Credentials are not valid.")
-	payload = decode_access_token()
+	payload = decode_access_token(token)
 	if payload is None:
 		raise cred_exception
 	email: str = payload.get("sub")
